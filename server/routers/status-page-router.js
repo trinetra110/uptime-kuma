@@ -1,3 +1,4 @@
+/* eslint-disable linebreak-style */
 let express = require("express");
 const apicache = require("../modules/apicache");
 const { UptimeKumaServer } = require("../uptime-kuma-server");
@@ -92,6 +93,65 @@ router.get("/api/status-page/heartbeat/:slug", cache("1 minutes"), async (reques
             list = R.convertToBeans("heartbeat", list);
             heartbeatList[monitorID] = list.reverse().map(row => row.toPublicJSON());
 
+            const type = 24;
+            uptimeList[`${monitorID}_${type}`] = await Monitor.calcUptime(type, monitorID);
+        }
+
+        response.json({
+            heartbeatList,
+            uptimeList
+        });
+
+    } catch (error) {
+        sendHttpError(response, error.message);
+    }
+});
+
+router.get("/api/status-page/heartbeat/advanced/:slug", cache("1 minutes"), async (request, response) => {
+    allowDevAllOrigin(response);
+
+    try {
+        let heartbeatList = {};
+        let uptimeList = {};
+
+        let slug = request.params.slug;
+        let statusPageID = await StatusPage.slugToID(slug);
+
+        let monitorIDList = await R.getCol(`
+            SELECT monitor_group.monitor_id FROM monitor_group, \`group\`
+            WHERE monitor_group.group_id = \`group\`.id
+            AND public = 1
+            AND \`group\`.status_page_id = ?
+        `, [
+            statusPageID
+        ]);
+        let statusPage = await R.findOne("status_page", " slug = ? ", [
+            slug
+        ]);
+
+        if (!statusPage) {
+            return null;
+        }
+
+        let statusPageData = await StatusPage.getStatusPageData(statusPage);
+        //console.log(statusPageData.publicGroupList[0].monitorList);
+        const newMonitorList = statusPageData.publicGroupList[0].monitorList;
+        let cnt = 0;
+        for (let monitorID of monitorIDList) {
+            let list = await R.getAll(`
+                    SELECT * FROM heartbeat
+                    WHERE monitor_id = ?
+                    ORDER BY time DESC
+                    LIMIT 1
+            `, [
+                monitorID,
+            ]);
+
+            list = R.convertToBeans("heartbeat", list);
+            heartbeatList[monitorID] = list.reverse().map(row => row.toPublicJSON());
+            heartbeatList[monitorID][0].status = heartbeatList[monitorID][0].status === 1 ? "UP" : "DOWN";
+            heartbeatList[monitorID].unshift(newMonitorList[cnt]);
+            cnt++;
             const type = 24;
             uptimeList[`${monitorID}_${type}`] = await Monitor.calcUptime(type, monitorID);
         }
