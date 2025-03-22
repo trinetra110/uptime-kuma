@@ -1,22 +1,51 @@
 $primary: #5cdd8b;
 $danger: #dc3545;
 $warning: #f8a306;
-$maintenance: #1747f5;
+$maintenance: #1747f5; 
 $link-color: #111;
-$border-radius: 50rem;
+$border-radius: 0;
 
-$highlight: #7ce8a4;
-$highlight-white: #e7faec;
+$highlight: #4caf50; 
+$highlight-white: #e7faec; 
 
-$dark-font-color: #b1b8c0;
-$dark-font-color2: #020b05;
-$dark-bg: #0d1117;
-$dark-bg2: #070a10;
-$dark-border-color: #1d2634;
-$dark-header-bg: #161b22;
+$dark-font-color: #b1b8c0; 
+$dark-font-color2: #020b05; 
+$dark-bg: #0d1117;  
+$dark-bg2: #070a10; 
+$dark-border-color: #1d2634; 
+$dark-header-bg: #161b22; 
 
 $easing-in: cubic-bezier(0.54, 0.78, 0.55, 0.97);
 $easing-out: cubic-bezier(0.25, 0.46, 0.45, 0.94);
 $easing-in-out: cubic-bezier(0.79, 0.14, 0.15, 0.86);
 
-$dropdown-border-radius: 0.5rem;
+$dropdown-border-radius: 0;  
+
+/* Button Colors */
+$btn-primary-bg: $primary;  
+$btn-primary-hover: darken($primary, 10%);  
+$btn-primary-text: #fff;  
+
+$btn-secondary-bg: $dark-border-color;  
+$btn-secondary-hover: lighten($dark-border-color, 10%); 
+$btn-secondary-text: $dark-font-color; 
+
+$btn-danger-bg: $danger;
+$btn-danger-hover: darken($danger, 10%); 
+$btn-danger-text: #fff; 
+
+$btn-warning-bg: $warning; 
+$btn-warning-hover: darken($warning, 10%); 
+$btn-warning-text: #fff; 
+
+$btn-info-bg: $maintenance; 
+$btn-info-hover: darken($maintenance, 10%); 
+$btn-info-text: #fff; 
+
+$btn-light-bg: $highlight-white; 
+$btn-light-hover: darken($highlight-white, 10%); 
+$btn-light-text: $dark-font-color2; 
+
+$btn-dark-bg: $dark-bg; 
+$btn-dark-hover: lighten($dark-bg, 10%); 
+$btn-dark-text: $dark-font-color; 
